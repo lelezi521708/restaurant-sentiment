@@ -1,0 +1,46 @@
+# macOS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments and secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+kaggle.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Raw and derived datasets are not redistributed
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Generated artifacts
+models/
+results/tables/*.csv
+results/tables/*.json
+results/figures/*.png
+results/figures/*.pdf
+!results/tables/.gitkeep
+!results/figures/.gitkeep
+
+# Reports generated locally
+report/*.aux
+report/*.bbl
+report/*.blg
+report/*.log
+report/*.out
+report/*.pdf

@@ -1,0 +1,28 @@
+name: 问题报告
+description: 报告代码或复现问题
+title: "[问题] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题描述
+      description: 发生了什么？
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 请提供命令、输入路径和参数。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+  - type: input
+    id: environment
+    attributes:
+      label: 运行环境
+      placeholder: macOS，Python 3.11

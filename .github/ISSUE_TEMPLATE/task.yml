@@ -1,0 +1,36 @@
+name: 项目任务
+description: 计划和跟踪项目任务
+title: "[任务] "
+labels: ["task"]
+body:
+  - type: input
+    id: owner
+    attributes:
+      label: 负责人
+      placeholder: 成员 2
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: 任务目标
+      description: 需要完成什么？
+    validations:
+      required: true
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: 交付物
+      description: 请列出代码、英文报告小节、图表和中文说明文档。
+    validations:
+      required: true
+  - type: input
+    id: deadline
+    attributes:
+      label: 建议截止时间
+      placeholder: 2026-11-13
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 前置依赖
+      description: 需要哪些前置任务或文件？
