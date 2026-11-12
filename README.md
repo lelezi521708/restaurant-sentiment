@@ -50,10 +50,45 @@ STAT8017 Data Mining Techniques 小组项目
 
 ## 三、数据集
 
-- 本次成员 2 分析使用含 `Review`（文本）和 `Liked`（0 负面，1 正面）的公开 `Restaurant_Reviews.tsv`。[固定版本下载](https://huggingface.co/datasets/KarthikaRajagopal/Restaurant_Reviews.tsv/resolve/ef6e2c7abbdf201ee732a2cb90ac394de6f5bb00/Restaurant_Reviews.tsv?download=true)
-- 原计划的 Kaggle 竞赛链接目前列出 8 个 CSV，查看和下载需要遵守竞赛规则。组员请对照数据字典的文件名、列名和 SHA-256 确认使用同一版本。[原计划 Kaggle 入口](https://www.kaggle.com/competitions/restaurant-reviews/data)
+### 最终采用的数据方案（所有成员必须遵守）
 
-把 TSV 放在本地 `data/raw/Restaurant_Reviews.tsv`。来源、下载日期、标签和用量统计见[数据字典](data/data_dictionary.md)。`data/raw/` 和 `data/processed/` 已被 Git 忽略。
+本项目最终统一使用含 `Review`（评论文本）和 `Liked`（0 负面、1 正面）的公开 `Restaurant_Reviews.tsv`：
+
+- [下载固定版本 Restaurant_Reviews.tsv](https://huggingface.co/datasets/KarthikaRajagopal/Restaurant_Reviews.tsv/resolve/ef6e2c7abbdf201ee732a2cb90ac394de6f5bb00/Restaurant_Reviews.tsv?download=true)
+- 文件名必须为 `Restaurant_Reviews.tsv`；
+- SHA-256 必须为 `2b432f36bc7c7ed77312187a9afd6531dfa3d16be48b9738131dd5141195b469`；
+- 原始样本为 1,000 条，负面和正面各 500 条；
+- Member 2 的清洗代码会删除 4 条同标签重复记录，保留 996 条。
+
+> **重要：原计划 Kaggle competition 下载的 8 个 CSV 已停用，不再用于本项目。**这些 CSV 的结构与当前 `Review`/`Liked` 情感二分类任务不一致。请不要读取、合并或上传这些旧 CSV；如已下载，可以移到项目外的备份目录。原 Kaggle 入口仅保留为选题过程记录，不是当前数据源。
+
+原始 TSV 和处理后的完整评论不会上传 GitHub。每位成员需要自行下载固定版本，并在本地运行 Member 2 的代码生成完全一致的训练集和测试集。来源、字段、版本和统计见[数据字典](data/data_dictionary.md)。
+
+### Member 3–5 如何接续 Member 2 的工作
+
+每位成员按以下顺序操作：
+
+1. 从上面的固定链接下载 `Restaurant_Reviews.tsv`；
+2. 放到自己克隆仓库的 `data/raw/Restaurant_Reviews.tsv`；
+3. 在仓库根目录安装依赖和项目包；
+4. 运行 Member 2 的 EDA 命令；
+5. 确认本地生成 `data/processed/train.csv` 和 `data/processed/test.csv`；
+6. 后续 TF-IDF、SVM 和 Naive Bayes 只使用这两个固定划分文件。
+
+~~~text
+下载 Restaurant_Reviews.tsv
+            ↓
+放入 data/raw/Restaurant_Reviews.tsv
+            ↓
+运行 python -m restaurant_sentiment.eda
+            ↓
+生成 data/processed/train.csv（796 条）
+     data/processed/test.csv（200 条）
+            ↓
+成员 3–5 开始各自任务
+~~~
+
+`data/raw/` 和 `data/processed/` 已被 Git 忽略，所以每位成员都要在自己的电脑上执行以上步骤。不要把原始 TSV、`train.csv` 或 `test.csv` 强制上传到 GitHub。
 
 ## 四、开发环境
 
@@ -109,7 +144,30 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ~~~
 
-### 4. 运行成员 2 的清洗与 EDA
+### 4. 下载并放置统一的原始数据
+
+从[固定版本链接](https://huggingface.co/datasets/KarthikaRajagopal/Restaurant_Reviews.tsv/resolve/ef6e2c7abbdf201ee732a2cb90ac394de6f5bb00/Restaurant_Reviews.tsv?download=true)下载文件，并确保目录如下：
+
+~~~text
+restaurant-sentiment/
+└── data/
+    └── raw/
+        └── Restaurant_Reviews.tsv
+~~~
+
+macOS/Linux 可选检查：
+
+~~~bash
+shasum -a 256 data/raw/Restaurant_Reviews.tsv
+~~~
+
+输出应以以下哈希开始：
+
+~~~text
+2b432f36bc7c7ed77312187a9afd6531dfa3d16be48b9738131dd5141195b469
+~~~
+
+### 5. 运行 Member 2 的清洗、划分与 EDA
 
 在仓库根目录执行：
 
@@ -117,14 +175,29 @@ python -m pip install -e .
 python -m restaurant_sentiment.eda --data data/raw/Restaurant_Reviews.tsv
 ~~~
 
-也可以打开 [01_data_eda.ipynb](notebooks/01_data_eda.ipynb)，从头运行所有单元格。CSV 或 TSV 使用不同列名时，在命令中添加 `--text-column` 和 `--label-column` 指定真实列名，标签语义应与数据字典一致。
+也可以打开 [01_data_eda.ipynb](notebooks/01_data_eda.ipynb)，从头运行所有单元格。全组已经固定数据版本和列名，不应再自行更换 CSV、列名或重新随机划分。
 
 - 后续特征与建模 notebook 读取 `data/processed/train.csv` 和 `data/processed/test.csv`，以 `Review` 为输入、`Liked` 为标签。划分按标签分层，比例为 80/20，随机种子为 `8017`。
 - 同目录保存完整清洗表 `cleaned_reviews.csv` 和对应划分清单 `split_manifest.csv`。
 - `results/tables/` 包含质量审计（`data_quality.json` 和 `data_quality.csv`）、类别分布、长度和训练集词频。三张英文图保存到 `results/figures/`。
 - 质量结论见[数据质量报告](docs/data_quality.md)。英文报告小节及引用见 [report 说明](report/README.md)。
 
-### 5. 运行完整 baseline
+运行完成后，可以检查文件是否生成：
+
+~~~bash
+wc -l data/processed/train.csv data/processed/test.csv
+~~~
+
+预期为 797 行和 201 行，其中各包含一行表头，即实际数据分别为 796 条和 200 条。
+
+### 6. 后续成员使用统一数据
+
+- Member 3：读取 `train.csv` 和 `test.csv`，只在训练集拟合 TF-IDF，再转换测试集；
+- Member 4：使用 Member 3 的统一特征设置和固定划分训练 Linear SVM；
+- Member 5：使用同一划分训练 Naive Bayes，并对所有模型进行统一评估；
+- 所有人不得各自重新执行不同的随机划分，也不得混入原来的 8 个 Kaggle CSV。
+
+### 7. 运行完整 baseline
 
 如果文件名是 `Restaurant_Reviews.tsv`：
 
@@ -134,27 +207,18 @@ python -m restaurant_sentiment.cli \
   --models dummy nb svm
 ~~~
 
-如果实际文件名或列名不同：
-
-~~~bash
-python -m restaurant_sentiment.cli \
-  --data data/raw/your_file.csv \
-  --text-column Review \
-  --label-column Liked
-~~~
-
 结果会自动保存到：
 
 - `results/tables/`：模型指标和关键词表；
 - `results/figures/`：混淆矩阵等图表。
 
-### 6. 运行测试
+### 8. 运行测试
 
 ~~~bash
 pytest
 ~~~
 
-### 7. 启动 JupyterLab
+### 9. 启动 JupyterLab
 
 ~~~bash
 jupyter lab
