@@ -50,29 +50,10 @@ STAT8017 Data Mining Techniques 小组项目
 
 ## 三、数据集
 
-- 数据来源：[Kaggle Restaurant Reviews](https://www.kaggle.com/competitions/restaurant-reviews/data)
-- 预计文本列：`Review`
-- 预计标签列：`Liked`
-- 标签含义：`0` 表示负面，`1` 表示正面
-- 使用条件：受 Kaggle 竞赛规则约束
+- 本次成员 2 分析使用含 `Review`（文本）和 `Liked`（0 负面，1 正面）的公开 `Restaurant_Reviews.tsv`。[固定版本下载](https://huggingface.co/datasets/KarthikaRajagopal/Restaurant_Reviews.tsv/resolve/ef6e2c7abbdf201ee732a2cb90ac394de6f5bb00/Restaurant_Reviews.tsv?download=true)
+- 原计划的 Kaggle 竞赛链接目前列出 8 个 CSV，查看和下载需要遵守竞赛规则。组员请对照数据字典的文件名、列名和 SHA-256 确认使用同一版本。[原计划 Kaggle 入口](https://www.kaggle.com/competitions/restaurant-reviews/data)
 
-### 数据下载方式
-
-原始数据不会通过本仓库重新发布。每位成员需要：
-
-1. 登录 Kaggle；
-2. 从上面的链接下载同一份数据；
-3. 将文件放入本地 `data/raw/`；
-4. 根据实际文件更新 [数据字典](data/data_dictionary.md)；
-5. 不要把原始数据、Kaggle token 或 `kaggle.json` 上传到 GitHub。
-
-例如：
-
-~~~text
-data/raw/Restaurant_Reviews.tsv
-~~~
-
-`data/raw/` 和 `data/processed/` 中的数据文件已经被 `.gitignore` 排除。
+把 TSV 放在本地 `data/raw/Restaurant_Reviews.tsv`。来源、下载日期、标签和用量统计见[数据字典](data/data_dictionary.md)。`data/raw/` 和 `data/processed/` 已被 Git 忽略。
 
 ## 四、开发环境
 
@@ -128,13 +109,20 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ~~~
 
-### 4. 下载并放置数据
+### 4. 运行成员 2 的清洗与 EDA
 
-从 Kaggle 下载后，将实际 CSV 或 TSV 文件放入：
+在仓库根目录执行：
 
-~~~text
-data/raw/
+~~~bash
+python -m restaurant_sentiment.eda --data data/raw/Restaurant_Reviews.tsv
 ~~~
+
+也可以打开 [01_data_eda.ipynb](notebooks/01_data_eda.ipynb)，从头运行所有单元格。CSV 或 TSV 使用不同列名时，在命令中添加 `--text-column` 和 `--label-column` 指定真实列名，标签语义应与数据字典一致。
+
+- 后续特征与建模 notebook 读取 `data/processed/train.csv` 和 `data/processed/test.csv`，以 `Review` 为输入、`Liked` 为标签。划分按标签分层，比例为 80/20，随机种子为 `8017`。
+- 同目录保存完整清洗表 `cleaned_reviews.csv` 和对应划分清单 `split_manifest.csv`。
+- `results/tables/` 包含质量审计（`data_quality.json` 和 `data_quality.csv`）、类别分布、长度和训练集词频。三张英文图保存到 `results/figures/`。
+- 质量结论见[数据质量报告](docs/data_quality.md)。英文报告小节及引用见 [report 说明](report/README.md)。
 
 ### 5. 运行完整 baseline
 
@@ -195,6 +183,7 @@ restaurant-sentiment/
 ├── src/restaurant_sentiment/
 │   ├── config.py                     # 随机种子和输出路径
 │   ├── data.py                       # 读取、清洗和划分数据
+│   ├── eda.py                        # 数据审计、划分文件和 EDA 图表
 │   ├── features.py                   # TF-IDF 特征
 │   ├── models.py                     # Dummy、NB 和 SVM
 │   ├── evaluation.py                 # 指标、图表和关键词

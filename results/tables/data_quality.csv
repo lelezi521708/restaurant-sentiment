@@ -1,0 +1,16 @@
+check,rows
+input_rows,1000
+missing_review_rows,0
+whitespace_only_review_rows,0
+missing_label_rows,0
+raw_exact_duplicate_excess_rows,4
+non_ascii_review_rows,4
+abnormal_character_review_rows,0
+replacement_character_review_rows,0
+normalized_review_rows,0
+removed_empty_review_rows,0
+removed_missing_label_rows,0
+conflicting_review_groups,0
+removed_conflicting_label_rows,0
+removed_same_label_duplicate_rows,4
+retained_rows,996

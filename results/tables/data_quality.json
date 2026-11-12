@@ -1,0 +1,38 @@
+{
+  "source_file": "Restaurant_Reviews.tsv",
+  "source_sha256": "2b432f36bc7c7ed77312187a9afd6531dfa3d16be48b9738131dd5141195b469",
+  "source_columns": [
+    "Review",
+    "Liked"
+  ],
+  "input_label_counts": {
+    "1": 500,
+    "0": 500
+  },
+  "random_state": 8017,
+  "test_size": 0.2,
+  "python_version": "3.11.18",
+  "scikit_learn_version": "1.9.1",
+  "pandas_version": "2.3.3",
+  "train_rows": 796,
+  "test_rows": 200,
+  "train_test_exact_review_overlap": 0,
+  "train_test_casefolded_review_overlap": 0,
+  "counts": {
+    "input_rows": 1000,
+    "missing_review_rows": 0,
+    "whitespace_only_review_rows": 0,
+    "missing_label_rows": 0,
+    "raw_exact_duplicate_excess_rows": 4,
+    "non_ascii_review_rows": 4,
+    "abnormal_character_review_rows": 0,
+    "replacement_character_review_rows": 0,
+    "normalized_review_rows": 0,
+    "removed_empty_review_rows": 0,
+    "removed_missing_label_rows": 0,
+    "conflicting_review_groups": 0,
+    "removed_conflicting_label_rows": 0,
+    "removed_same_label_duplicate_rows": 4,
+    "retained_rows": 996
+  }
+}

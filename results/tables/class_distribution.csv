@@ -1,0 +1,7 @@
+partition,label,sentiment,reviews,share
+Cleaned,0,Negative,497,0.49899598393574296
+Cleaned,1,Positive,499,0.501004016064257
+Train,0,Negative,397,0.49874371859296485
+Train,1,Positive,399,0.5012562814070352
+Test,0,Negative,100,0.5
+Test,1,Positive,100,0.5
