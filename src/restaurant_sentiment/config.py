@@ -4,6 +4,8 @@ from pathlib import Path
 
 RANDOM_STATE = 8017
 DEFAULT_TEST_SIZE = 0.20
+# Selected by Member 3's training-only five-fold positive-class F1 comparison.
+DEFAULT_NGRAM_RANGE = (1, 1)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TABLES_DIR = PROJECT_ROOT / "results" / "tables"

@@ -197,7 +197,26 @@ wc -l data/processed/train.csv data/processed/test.csv
 - Member 5：使用同一划分训练 Naive Bayes，并对所有模型进行统一评估；
 - 所有人不得各自重新执行不同的随机划分，也不得混入原来的 8 个 Kaggle CSV。
 
-### 7. 运行完整 baseline
+### 7. 运行成员 3 的特征实验
+
+```bash
+python -m restaurant_sentiment.preprocessing
+```
+
+直接读取成员 2 的固定划分，在训练集内使用相同的五折比较 unigram 与 unigram + bigram。向量化器在每个验证折内重新拟合，测试集不参与选参或评价。
+
+本次按固定 SVM `C=1` 的平均正类 F1 选择 **unigram** 为共享默认（0.8016，对比 bigram 的 0.7998；差距很小，不代表显著优劣）。训练词汇维度分别为 1781 和 7345。
+
+- 可运行 notebook：`notebooks/02_preprocessing.ipynb`；
+- 中文参数、输出、复现与交接说明：[成员 3 交接](docs/member3_tfidf.md)；
+- 汇总表：`results/tables/tfidf_cv_comparison.csv`；
+- 特征矩阵及行清单：`data/processed/tfidf/`，仅保留本地；
+- 拟合向量化器及参数：`models/tfidf/`，仅保留本地；
+- 英文报告小节：`report/text_features.tex`。
+
+下游使用 `build_pipeline` 会共享 unigram 默认。内部交叉验证必须从完整 pipeline 开始，不能先在全部训练集拟合 TF-IDF。成员 4 的 C 调参和成员 5 的正式测试评估仍由对应成员负责。
+
+### 8. 运行完整 baseline
 
 如果文件名是 `Restaurant_Reviews.tsv`：
 
@@ -212,13 +231,13 @@ python -m restaurant_sentiment.cli \
 - `results/tables/`：模型指标和关键词表；
 - `results/figures/`：混淆矩阵等图表。
 
-### 8. 运行测试
+### 9. 运行测试
 
 ~~~bash
 pytest
 ~~~
 
-### 9. 启动 JupyterLab
+### 10. 启动 JupyterLab
 
 ~~~bash
 jupyter lab

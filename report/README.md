@@ -21,3 +21,9 @@
 从 `report/` 编译主文档时，使用 `\input{data_eda}` 引入小节。把 `data_eda.bib` 的两条文献合并到主文献库，或将该文件添加到主文档的 BibTeX 文件列表。运行 EDA 命令后，正文所需的长度分布图位于 `../results/figures/eda_review_lengths.png`。
 
 本小节的数字对应数据字典中记录的公开 TSV 快照。若全组采用其他文件，先用最终文件重跑 EDA，再按输出更新正文、表格与引用。
+
+## 成员 3 Text Preprocessing and Feature Representation
+
+使用 `\input{text_features}` 引入 `text_features.tex`，把 `text_features.bib` 加入主文献库。先运行 `python -m restaurant_sentiment.preprocessing`，对应数值见 `results/tables/tfidf_cv_comparison.csv` 和 `tfidf_feature_summary.csv`。本节仅报告训练集内五折特征对比，不是最终测试集评估。
+
+英文图 `results/figures/tfidf_ngram_cv_f1.png` 为补充交接图；小节已经含有紧凑表格，主报告可按 8 页限制决定是否再插入该图。
