@@ -1,6 +1,6 @@
 # 成员 3 提交前检查与交接
 
-当前交付仅在本地，尚未提交 commit、推送分支或创建 Pull Request。下面的内容供本人核对后提交，不代表已发送给其他成员。
+本交付已提交至 `member-3/tfidf-features` 分支，等待组内审阅和合并。以下清单同时作为后续成员的复现与交接记录。
 
 ## 交付清单
 
@@ -11,7 +11,8 @@
 - 中文说明：`docs/member3_tfidf.md`、本文件、仓库和报告目录 README。
 - 英文报告：`report/text_features.tex`、`report/text_features.bib`。
 - 已验证核心依赖：`requirements-member3.txt`。
-- 本地结果：`results/tables/tfidf_*`、`results/figures/tfidf_ngram_cv_f1.png`。
+- 已提交的汇总结果：`tfidf_cv_comparison.csv`、`tfidf_feature_summary.csv`、`tfidf_experiment.json` 和 `tfidf_ngram_cv_f1.png`。
+- 其余逐折结果仅在运行实验后保留本地。
 - 仅本地交接：`data/processed/tfidf/`、`models/tfidf/`。
 
 ## 验证
@@ -46,7 +47,7 @@ git add README.md requirements-member3.txt \
   report/README.md report/text_features.tex report/text_features.bib
 ```
 
-`results/` 默认被忽略。若组内同意提交报告所需汇总结果，仅明确添加以下不含原始评论的文件，不要强制添加整个结果目录：
+`results/` 默认被忽略。本分支仅明确提交了以下不含原始评论的报告汇总结果，没有强制添加整个结果目录：
 
 ```bash
 git add -f results/tables/tfidf_cv_comparison.csv \

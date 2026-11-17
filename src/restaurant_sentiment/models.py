@@ -24,9 +24,8 @@ def build_classifier(name: str):
 
 
 def svm_parameter_grid() -> dict[str, list[object]]:
-    """Small, course-appropriate grid for SVM and n-gram experiments."""
+    """Return the SVM grid after Member 3 locked the text representation."""
 
     return {
-        "tfidf__ngram_range": [(1, 1), (1, 2)],
         "classifier__C": [0.1, 1.0, 10.0],
     }

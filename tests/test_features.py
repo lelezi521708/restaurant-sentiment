@@ -9,6 +9,7 @@ from sklearn.model_selection import StratifiedKFold
 
 from restaurant_sentiment.eda import run_eda
 from restaurant_sentiment.features import build_tfidf
+from restaurant_sentiment.models import svm_parameter_grid
 from restaurant_sentiment.pipeline import build_pipeline
 from restaurant_sentiment.preprocessing import (
     compare_ngrams, describe_matrix, load_fixed_partitions, run_preprocessing,
@@ -41,6 +42,7 @@ def test_default_pipeline_uses_the_shared_selected_representation():
     assert DEFAULT_NGRAM_RANGE == (1, 1)
     for model in ("svm", "nb", "dummy"):
         assert build_pipeline(model).named_steps["tfidf"].ngram_range == DEFAULT_NGRAM_RANGE
+    assert svm_parameter_grid() == {"classifier__C": [0.1, 1.0, 10.0]}
 
 
 def test_pipeline_fits_vectorizer_inside_each_fold():

@@ -1,0 +1,5 @@
+variant,partition,rows,features,nonzero,density,zero_rows
+unigram,train,796,1781,7836,0.0055273560390385395,0
+unigram,test,200,1781,1653,0.004640651319483436,0
+unigram_bigram,train,796,7345,15269,0.002611594391289326,0
+unigram_bigram,test,200,7345,2342,0.00159428182437032,0

@@ -72,7 +72,7 @@ search = GridSearchCV(build_pipeline("svm"),
 search.fit(train["Review"], train["Liked"])
 ```
 
-此处是供成员 4 使用的接口示例，不是本次已经完成的调参实验。仓库原 `tune_svm` 仍包含 n-gram 联合搜索；若要遵守本次锁定的表示，应使用上面只搜索 C 的网格。需要联合搜索时，必须仅在训练折内进行并重新记录选择。
+此处是供成员 4 使用的接口示例，不是本次已经完成的调参实验。共享 `svm_parameter_grid()` 和 `tune_svm()` 已锁定 unigram，只搜索 `C=[0.1, 1.0, 10.0]`。如后续确需重新联合搜索 n-gram，必须由成员 3–5 先确认，并且只在训练折内进行、重新记录选择。
 
 最终训练可直接加载已拟合特征：
 
