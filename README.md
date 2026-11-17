@@ -205,16 +205,131 @@ python -m restaurant_sentiment.preprocessing
 
 直接读取成员 2 的固定划分，在训练集内使用相同的五折比较 unigram 与 unigram + bigram。向量化器在每个验证折内重新拟合，测试集不参与选参或评价。
 
-本次按固定 SVM `C=1` 的平均正类 F1 选择 **unigram** 为共享默认（0.8016，对比 bigram 的 0.7998；差距很小，不代表显著优劣）。训练词汇维度分别为 1781 和 7345。
+#### Member 3 已完成的内容
+
+Member 3 的代码会先检查 Member 2 的固定交接文件：
+
+```text
+data/processed/train.csv
+data/processed/test.csv
+data/processed/split_manifest.csv
+```
+
+检查内容包括：
+
+- `review_id` 是否有效且唯一；
+- train/test 的 ID 和评论文本是否重叠；
+- 标签是否只包含 0 和 1；
+- train/test 是否与 `split_manifest.csv` 完全一致；
+- 是否错误地重新清洗、随机打乱或划分数据。
+
+共享 TF-IDF 设置包括：转小写、Unicode 去音调、保留否定词、不删除停用词、不做词干化或词形还原、sublinear TF、平滑 IDF 和 L2 归一化。详细参数见[成员 3 TF-IDF 交接](docs/member3_tfidf.md)。
+
+特征比较只使用训练集，并采用：
+
+```python
+StratifiedKFold(n_splits=5, shuffle=True, random_state=8017)
+```
+
+每一个验证折都会重新拟合完整的 TF-IDF + classifier pipeline，避免验证折词汇或 IDF 泄漏。比较阶段固定使用 Linear SVM `C=1` 和 Multinomial NB `alpha=1`，测试集不参与特征选择。
+
+| Features | Probe model | Mean F1 | SD |
+|---|---|---:|---:|
+| Unigram | Linear SVM | 0.8016 | 0.0282 |
+| Unigram + bigram | Linear SVM | 0.7998 | 0.0388 |
+| Unigram | Multinomial NB | 0.7962 | 0.0484 |
+| Unigram + bigram | Multinomial NB | 0.7845 | 0.0394 |
+
+最终按固定 SVM 的平均正类 F1 选择 **unigram** 为共享默认。unigram 有 1,781 个特征，unigram + bigram 有 7,345 个特征；F1 差异约为 0.0018，远小于折间波动，因此不能宣称 unigram 在一般情况下显著更好。
 
 - 可运行 notebook：`notebooks/02_preprocessing.ipynb`；
 - 中文参数、输出、复现与交接说明：[成员 3 交接](docs/member3_tfidf.md)；
 - 汇总表：`results/tables/tfidf_cv_comparison.csv`；
+- 特征统计：`results/tables/tfidf_feature_summary.csv`；
+- 实验配置和输入哈希：`results/tables/tfidf_experiment.json`；
+- 对比图：`results/figures/tfidf_ngram_cv_f1.png`；
 - 特征矩阵及行清单：`data/processed/tfidf/`，仅保留本地；
 - 拟合向量化器及参数：`models/tfidf/`，仅保留本地；
 - 英文报告小节：`report/text_features.tex`。
 
-下游使用 `build_pipeline` 会共享 unigram 默认。内部交叉验证必须从完整 pipeline 开始，不能先在全部训练集拟合 TF-IDF。成员 4 的 C 调参和成员 5 的正式测试评估仍由对应成员负责。
+#### Member 1 的审查与修改
+
+Member 1 已在项目 Python 3.11 环境完成代码审查和复现，并进行了以下修改：
+
+1. 将 unigram 锁定为 `DEFAULT_NGRAM_RANGE=(1, 1)`；
+2. 将共享 `svm_parameter_grid()` 改为只搜索 `C=[0.1, 1.0, 10.0]`，不再重新搜索 n-gram；
+3. 增加回归测试，确保后续不会意外恢复 n-gram 搜索；
+4. 提交四个不含原始评论的汇总表和图；
+5. 更新 Member 3 的交接状态和过期说明；
+6. 确认原始 TSV、train/test、稀疏矩阵、词汇表和 joblib 模型没有上传 GitHub。
+
+复现结果：14 个测试全部通过，`02_preprocessing.ipynb` 可在 Python 3.11 环境从头执行，测试集未参与特征或参数选择。
+
+#### Member 4 接下来如何使用
+
+合并后先更新本地 `main`，重新生成 Member 2 和 Member 3 的本地文件：
+
+```bash
+git switch main
+git pull origin main
+python -m restaurant_sentiment.eda --data data/raw/Restaurant_Reviews.tsv
+python -m restaurant_sentiment.preprocessing
+```
+
+Member 4 使用 unigram 训练和调优 Linear SVM。只搜索 `C`，不能重新搜索 unigram/bigram：
+
+```python
+from sklearn.model_selection import GridSearchCV, StratifiedKFold
+from restaurant_sentiment.pipeline import build_pipeline
+
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=8017)
+search = GridSearchCV(
+    estimator=build_pipeline("svm"),
+    param_grid={"classifier__C": [0.1, 1.0, 10.0]},
+    scoring="f1",
+    cv=cv,
+    n_jobs=-1,
+)
+search.fit(train["Review"], train["Liked"])
+```
+
+Member 4 必须注意：
+
+- 只能根据训练集交叉验证选择 `C`；
+- 每折必须重新拟合完整 TF-IDF + SVM pipeline；
+- 不能使用已在完整训练集上拟合的 `.npz` 特征矩阵进行内部交叉验证；
+- 不能根据测试集选择参数；
+- 最终测试集评价要与 Member 5 协调后统一进行；
+- 需要提交代码/notebook、各个 C 的 CV 结果、最佳参数、中文交接说明和英文 Methodology/Experiments 小节。
+
+#### Member 5 接下来如何使用
+
+Member 5 使用相同数据划分和 unigram 特征：
+
+```python
+from restaurant_sentiment.pipeline import build_pipeline
+
+nb_pipeline = build_pipeline("nb")
+```
+
+如需调节 Multinomial NB，可以只在训练集交叉验证中比较：
+
+```python
+{"classifier__alpha": [0.1, 0.5, 1.0, 2.0]}
+```
+
+SVM 和 NB 的设置全部确定后，Member 5 再使用固定的 200 条测试集完成统一最终评估，包括 Accuracy、Precision、Recall、F1、ROC-AUC、混淆矩阵、重要词语和错误案例。所有模型必须使用相同测试集和指标，不能重新划分数据。
+
+Member 5 需要提交 NB 代码/notebook、统一模型比较、图表、关键词与错误分析、中文交接说明，以及英文 Results、Error Analysis 和 Discussion 小节。
+
+#### 下游共同约束
+
+- `build_pipeline()` 默认统一使用 unigram；
+- 内部交叉验证必须从原始训练文本和完整 pipeline 开始；
+- 不能先在全部训练集拟合 TF-IDF，再对该矩阵做交叉验证；
+- 测试集只在所有模型和参数锁定后使用一次；
+- Member 3 的本地 `.npz` 和 joblib 文件可以用于最终拟合后的交接，但不能代替训练折内的特征拟合；
+- 最终报告、图表标题、表格标题和图注全部使用英文。
 
 ### 8. 运行完整 baseline
 
