@@ -1,0 +1,12 @@
+# Core versions for the Member 3 experiment.
+# Python 3.11 uses a compatible SciPy release; Python 3.12 keeps the original pin.
+# Install after requirements.txt when exact reproduction is needed.
+numpy==2.3.5
+pandas==2.2.3
+scipy==1.16.3; python_version < "3.12"
+scipy==1.18.1; python_version >= "3.12"
+scikit-learn==1.9.1
+matplotlib==3.11.2
+seaborn==0.13.2
+joblib==1.6.0
+pytest==8.4.2

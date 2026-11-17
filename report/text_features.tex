@@ -1,0 +1,73 @@
+\section{Text Preprocessing and Feature Representation}
+\label{sec:text-features}
+
+\paragraph{Representation.}
+We used the fixed 796-review training partition and reserved the
+200-review test partition for subsequent final evaluation.
+After the shared data cleaning, we lowercased text and applied Unicode
+accent stripping. The word tokenizer retained tokens of at least two
+word characters. We did not remove stop words or apply stemming or
+lemmatization, retaining explicit negation words such as \emph{not},
+\emph{no}, and \emph{never}. The default tokenizer nevertheless splits
+contractions and drops single-character fragments; this does not
+preserve all contracted negation. Punctuation intensity and long-range
+word order are not represented.
+
+We compared word unigrams with word unigrams plus adjacent bigrams using
+scikit-learn's TF--IDF implementation \citep{pedregosa2011scikit,manning2008ir}.
+Term frequency was scaled as $1+\ln(c)$ for positive count $c$.
+Smoothed inverse document frequency was
+$\ln((1+n)/(1+\mathrm{df}))+1$, followed by document-wise L2 normalization.
+We set \texttt{min\_df=1}, \texttt{max\_df=1.0}, and imposed no vocabulary
+cap. The resulting nonnegative features are compatible with both
+Multinomial Naive Bayes and Linear SVM.
+
+\paragraph{Training-only comparison.}
+We used identical five-fold stratified training splits with shuffling
+and random seed 8017. A fresh vectorizer and classifier were fitted
+inside every fold; validation texts did not determine vocabulary or IDF.
+Linear SVM with fixed $C=1$ was the feature-selection probe, and
+Multinomial Naive Bayes with fixed $\alpha=1$ was a sensitivity check.
+We selected the representation by mean positive-class validation F1
+under the SVM probe, preferring unigrams in an exact tie. This experiment
+does not replace later classifier tuning or final test evaluation.
+
+\begin{table}[t]
+  \caption{Training-only five-fold feature comparison. Values are mean
+  positive-class F1 and sample standard deviation across folds, not
+  confidence intervals. No test-set performance is reported.}
+  \label{tab:tfidf-ablation}
+  \centering
+  \begin{tabular}{llr}
+    \hline
+    Features & Probe & F1 mean $\pm$ SD \\
+    \hline
+    Unigram & Linear SVM & $0.8016 \pm 0.0282$ \\
+    Unigram + bigram & Linear SVM & $0.7998 \pm 0.0388$ \\
+    Unigram & Multinomial NB & $0.7962 \pm 0.0484$ \\
+    Unigram + bigram & Multinomial NB & $0.7845 \pm 0.0394$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\paragraph{Feature summary and handoff.}
+Unigrams yielded a mean SVM validation F1 of 0.8016, compared with
+0.7998 for unigrams plus bigrams (Table~\ref{tab:tfidf-ablation}).
+The difference of approximately 0.0018 was small relative to fold
+variability and does not establish a significant or general advantage.
+Although bigrams slightly increased mean SVM accuracy
+(0.8041 versus 0.8015) and ROC-AUC (0.8972 versus 0.8953),
+they did not improve the prespecified F1 criterion.
+We therefore recommend unigrams as the shared default.
+
+Fitting on the full training partition produced 1,781 unigram features
+and 7,345 unigram--bigram features, a 4.12-fold increase in dimension.
+The training matrices contained 7,836 and 15,269 nonzero entries,
+respectively, with densities of 0.553\% and 0.261\%.
+All training and transformed test rows had at least one nonzero feature.
+The larger phrase vocabulary may be difficult to estimate reliably
+from this small corpus. We exported sparse matrices, ordered row IDs,
+vocabularies, fitted vectorizers, and parameter metadata for subsequent
+members. Test texts were transformed only after fitting on training
+texts. Classifier cross-validation must still refit the full pipeline
+within each fold rather than reuse these full-training fitted matrices.

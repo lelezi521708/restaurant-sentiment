@@ -3,12 +3,13 @@
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 
+from .config import DEFAULT_NGRAM_RANGE
 from .evaluation import classification_metrics, prediction_scores
 from .features import build_tfidf
 from .models import build_classifier, svm_parameter_grid
 
 
-def build_pipeline(model_name: str, ngram_range=(1, 2)) -> Pipeline:
+def build_pipeline(model_name: str, ngram_range=DEFAULT_NGRAM_RANGE) -> Pipeline:
     """Combine TF-IDF and a classifier without leaking test information."""
 
     return Pipeline(

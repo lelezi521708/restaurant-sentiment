@@ -1,0 +1,54 @@
+{
+  "random_state": 8017,
+  "cv_folds": 5,
+  "cv_std_ddof": 1,
+  "selected_variant": "unigram",
+  "selection_rule": "Highest mean training-fold positive-class F1 with fixed LinearSVC(C=1); ties prefer unigram.",
+  "test_metrics_computed": false,
+  "vectorizer_parameters": {
+    "analyzer": "word",
+    "binary": false,
+    "decode_error": "strict",
+    "encoding": "utf-8",
+    "input": "content",
+    "lowercase": true,
+    "max_df": 1.0,
+    "max_features": null,
+    "min_df": 1,
+    "ngram_range": [
+      1,
+      1
+    ],
+    "norm": "l2",
+    "preprocessor": null,
+    "smooth_idf": true,
+    "stop_words": null,
+    "strip_accents": "unicode",
+    "sublinear_tf": true,
+    "token_pattern": "(?u)\\b\\w\\w+\\b",
+    "tokenizer": null,
+    "use_idf": true,
+    "vocabulary": null
+  },
+  "probe_parameters": {
+    "svm": {
+      "C": 1.0
+    },
+    "nb": {
+      "alpha": 1.0
+    }
+  },
+  "input_sha256": {
+    "train.csv": "cb874f345b78bd41ed234354aafd84583fac5d96e39c0d2515e5b3adf2514e6c",
+    "test.csv": "0e2af7309739fed02bd18dfb7e9a7f0edbc81f6e0e538efeeaf1093992b924cf",
+    "split_manifest.csv": "78cfba981e05f17b9ac7504353acb404aceee0b3218301026fb9a681ef38cf2a"
+  },
+  "versions": {
+    "python": "3.11.18",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  }
+}
