@@ -29,3 +29,11 @@ def svm_parameter_grid() -> dict[str, list[object]]:
     return {
         "classifier__C": [0.1, 1.0, 10.0],
     }
+
+
+def nb_parameter_grid() -> dict[str, list[float]]:
+    """Return the training-only Multinomial NB smoothing grid for Member 5."""
+
+    return {
+        "classifier__alpha": [0.1, 0.5, 1.0, 2.0],
+    }
