@@ -331,6 +331,35 @@ Member 5 需要提交 NB 代码/notebook、统一模型比较、图表、关键�
 - Member 3 的本地 `.npz` 和 joblib 文件可以用于最终拟合后的交接，但不能代替训练折内的特征拟合；
 - 最终报告、图表标题、表格标题和图注全部使用英文。
 
+#### Member 5 已完成的内容
+
+Members 4 和 5 可以并行准备模型，但数字只在参数锁定后统一生成。成员 5 的交付已提交至 `member-5/nb-evaluation` 分支，包含 NB 训练折调参、三模型统一测试评价、ROC 与混淆矩阵、关键词和错误分析。
+
+重新生成全部结果：
+
+```bash
+python -m restaurant_sentiment.final_evaluation
+python -m pytest -q
+```
+
+如果成员 4 的训练折调参选出 `C != 1`，必须改成以下命令重跑，不能用测试集选 `C`：
+
+```bash
+python -m restaurant_sentiment.final_evaluation --svm-c <成员4选出的C>
+```
+
+NB 平滑参数只在训练集内比较 `alpha=[0.1, 0.5, 1.0, 2.0]`，采用 `StratifiedKFold(5, shuffle=True, random_state=8017)`，每折重新拟合完整 TF-IDF + NB pipeline。选定 `alpha=0.5`（训练折平均正类 F1 为 0.8052）后才评价固定的 200 条测试集。Linear SVM 当前使用共享默认 `C=1`，来源见 `results/tables/final_evaluation.json` 的 `svm_c_source`。
+
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
+|---|---:|---:|---:|---:|---:|
+| Dummy (majority) | 0.500 | 0.500 | 1.000 | 0.667 | 0.500 |
+| Multinomial NB (alpha=0.5) | 0.750 | 0.766 | 0.720 | 0.742 | 0.837 |
+| Linear SVM (C=1) | 0.755 | 0.793 | 0.690 | 0.738 | 0.842 |
+
+NB 的 F1 略高，SVM 的 accuracy、precision 和 ROC-AUC 略高；差距很小，不作显著性结论。NB 的错误为 50 个（22 FP、28 FN），其中 16 个短评论、10 个带否定词；错误类别是描述性启发式，不代表因果。
+
+可运行 notebook：`notebooks/04_naive_bayes.ipynb`（只在训练折调 NB）和 `notebooks/05_evaluation_error_analysis.ipynb`（参数锁定后一次性评价）。中文交接见[成员 5 交接](docs/member5_handoff.md)；英文报告小节见 `report/nb_evaluation.tex`。提交到仓库的汇总表和图包括 `results/tables/final_*.csv`、`results/tables/final_evaluation.json` 和 `results/figures/final_*.png`；含完整评论的 `data/processed/final_errors_*.csv`、`final_predictions.csv` 以及拟合模型仅保留本地。验证环境为 Python 3.12.14、`scikit-learn 1.9.1`，22 项测试全部通过。
+
 ### 8. 运行完整 baseline
 
 如果文件名是 `Restaurant_Reviews.tsv`：

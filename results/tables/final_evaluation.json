@@ -1,0 +1,55 @@
+{
+  "random_state": 8017,
+  "cv_folds": 5,
+  "cv_std_ddof": 0,
+  "nb_alpha_grid": [
+    0.1,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "nb_alpha_selected_by_training_f1": 0.5,
+  "nb_alpha_used_in_final_fit": 0.5,
+  "nb_alpha_overridden": false,
+  "svm_c_used_in_final_fit": 1.0,
+  "svm_c_source": "shared default C=1.0; regenerate with --svm-c if Member 4 selects another value",
+  "train_rows": 796,
+  "test_rows": 200,
+  "best_final_model_by_f1": "nb",
+  "test_metrics_computed": true,
+  "test_set_used_only_after_parameters_locked": true,
+  "input_sha256": {
+    "train.csv": "cb874f345b78bd41ed234354aafd84583fac5d96e39c0d2515e5b3adf2514e6c",
+    "test.csv": "0e2af7309739fed02bd18dfb7e9a7f0edbc81f6e0e538efeeaf1093992b924cf",
+    "split_manifest.csv": "78cfba981e05f17b9ac7504353acb404aceee0b3218301026fb9a681ef38cf2a"
+  },
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.5.5",
+    "pandas": "2.3.3",
+    "scipy": "1.18.1",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "committed_outputs": [
+    "results/tables/final_nb_cv.csv",
+    "results/tables/final_model_comparison.csv",
+    "results/tables/final_nb_top_terms.csv",
+    "results/tables/final_svm_top_terms.csv",
+    "results/tables/final_error_summary.csv",
+    "results/tables/final_evaluation.json",
+    "results/figures/final_nb_alpha_cv.png",
+    "results/figures/final_model_comparison.png",
+    "results/figures/final_roc_curves.png",
+    "results/figures/final_confusion_matrix_dummy.png",
+    "results/figures/final_confusion_matrix_nb.png",
+    "results/figures/final_confusion_matrix_svm.png",
+    "results/figures/final_error_categories.png"
+  ],
+  "local_only_outputs": [
+    "data/processed/final_errors_dummy.csv",
+    "data/processed/final_errors_nb.csv",
+    "data/processed/final_errors_svm.csv",
+    "data/processed/final_predictions.csv"
+  ]
+}
