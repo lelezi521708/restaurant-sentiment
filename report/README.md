@@ -31,3 +31,9 @@
 ## 成员 4 Linear SVM
 
 使用 `\input{svm}` 引入 `svm.tex`，并把 `svm.bib` 合并到主文献库。先运行 `python -m restaurant_sentiment.svm_experiment`，表中数值可追溯到 `results/tables/svm_cv_results.csv` 和 `svm_test_metrics.csv`。统一模型比较合并后，应以成员 5 使用 `--svm-c 0.1` 重跑的最终结果为准。
+
+## 成员 5 Naive Bayes、Results、Error Analysis 和 Discussion
+
+使用 `\input{nb_evaluation}` 引入 `report/nb_evaluation.tex`。该小节包含四个英文 section，数字由 `python -m restaurant_sentiment.final_evaluation` 生成，对应 `results/tables/final_model_comparison.csv`、`final_nb_cv.csv`、`final_error_summary.csv` 和 `results/figures/final_roc_curves.png`。统一评估默认使用成员 4 在训练折内锁定的 SVM `C=0.1`，不要用测试集调参。
+
+`nb_evaluation.tex` 引用的 `pedregosa2011scikit`、`manning2008ir` 和 `rajagopal-restaurant-reviews` 已分别出现在成员 2/3 的 bib 文件中，主报告合并时不要重复添加相同 key。主报告建议保留 `tab:final-comparison`、`fig:final-roc`、`tab:error-summary`；其余表和图作为补充。报告不包含原始评论文本，错误案例仅以本地语料中的 review ID 指代。

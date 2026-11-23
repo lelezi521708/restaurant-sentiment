@@ -1,0 +1,4 @@
+model,reviews,correct,errors,false_positive,false_negative,high_confidence_errors,errors_with_negation,errors_with_contrast,mixed_sentiment_errors,median_words_errors,median_words_correct,category_mixed sentiment terms,category_negation or contraction,category_contrast or qualification,category_short review,category_other
+dummy,200,100,100,100,0,0,34,10,2,10.0,10.5,2,34,5,22,37
+nb,200,150,50,22,28,2,10,2,0,9.0,10.0,0,10,1,16,23
+svm,200,148,52,19,33,2,10,2,0,10.5,10.0,0,10,1,15,26
