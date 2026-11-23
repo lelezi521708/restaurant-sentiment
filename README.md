@@ -320,6 +320,31 @@ nb_pipeline = build_pipeline("nb")
 
 SVM 和 NB 的设置全部确定后，Member 5 再使用固定的 200 条测试集完成统一最终评估，包括 Accuracy、Precision、Recall、F1、ROC-AUC、混淆矩阵、重要词语和错误案例。所有模型必须使用相同测试集和指标，不能重新划分数据。
 
+### 8. 运行成员 4 的 Linear SVM 实验
+
+```bash
+python -m restaurant_sentiment.svm_experiment
+```
+
+该命令只在 796 条训练评论内进行五折分层交叉验证，比较 `C=[0.1, 1.0, 10.0]`，并在每一折重新拟合完整 unigram TF-IDF + Linear SVM pipeline。按正类 F1 选择的最终参数为 **`C=0.1`**（CV F1 0.8060）。参数锁定后，模型在固定 200 条测试集上的 Accuracy 为 0.7400、F1 为 0.7204、ROC-AUC 为 0.8061。
+
+主要输出：
+
+- `results/tables/svm_cv_results.csv`：每个 C 的五折指标；
+- `results/tables/svm_test_metrics.csv`：锁定模型的测试指标；
+- `results/tables/svm_test_predictions.csv`：不含评论原文的逐条预测；
+- `results/tables/svm_top_terms.csv`：正负权重最高的词；
+- `results/tables/svm_experiment.json`：版本、哈希和实验参数；
+- `results/figures/svm_c_cv_f1.png` 和 `svm_test_confusion_matrix.png`；
+- `docs/member4_svm.md`：中文交接；
+- `report/svm.tex` 和 `report/svm.bib`：英文报告小节与引用。
+
+成员 5 的统一评估应使用：
+
+```bash
+python -m restaurant_sentiment.final_evaluation --svm-c 0.1
+```
+
 Member 5 需要提交 NB 代码/notebook、统一模型比较、图表、关键词与错误分析、中文交接说明，以及英文 Results、Error Analysis 和 Discussion 小节。
 
 #### 下游共同约束
@@ -331,7 +356,7 @@ Member 5 需要提交 NB 代码/notebook、统一模型比较、图表、关键�
 - Member 3 的本地 `.npz` 和 joblib 文件可以用于最终拟合后的交接，但不能代替训练折内的特征拟合；
 - 最终报告、图表标题、表格标题和图注全部使用英文。
 
-### 8. 运行完整 baseline
+### 9. 运行完整 baseline
 
 如果文件名是 `Restaurant_Reviews.tsv`：
 
@@ -346,13 +371,13 @@ python -m restaurant_sentiment.cli \
 - `results/tables/`：模型指标和关键词表；
 - `results/figures/`：混淆矩阵等图表。
 
-### 9. 运行测试
+### 10. 运行测试
 
 ~~~bash
 pytest
 ~~~
 
-### 10. 启动 JupyterLab
+### 11. 启动 JupyterLab
 
 ~~~bash
 jupyter lab

@@ -1,0 +1,2 @@
+model,accuracy,precision,recall,f1,roc_auc
+svm,0.74,0.7790697674418605,0.67,0.7204301075268817,0.8061

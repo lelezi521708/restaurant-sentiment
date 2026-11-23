@@ -27,3 +27,7 @@
 使用 `\input{text_features}` 引入 `text_features.tex`，把 `text_features.bib` 加入主文献库。先运行 `python -m restaurant_sentiment.preprocessing`，对应数值见 `results/tables/tfidf_cv_comparison.csv` 和 `tfidf_feature_summary.csv`。本节仅报告训练集内五折特征对比，不是最终测试集评估。
 
 英文图 `results/figures/tfidf_ngram_cv_f1.png` 为补充交接图；小节已经含有紧凑表格，主报告可按 8 页限制决定是否再插入该图。
+
+## 成员 4 Linear SVM
+
+使用 `\input{svm}` 引入 `svm.tex`，并把 `svm.bib` 合并到主文献库。先运行 `python -m restaurant_sentiment.svm_experiment`，表中数值可追溯到 `results/tables/svm_cv_results.csv` 和 `svm_test_metrics.csv`。统一模型比较合并后，应以成员 5 使用 `--svm-c 0.1` 重跑的最终结果为准。
