@@ -7,7 +7,7 @@
 - NB 平滑参数网格与训练折内调参：`src/restaurant_sentiment/models.py`、`src/restaurant_sentiment/final_evaluation.py`。
 - 评估与解释工具：`src/restaurant_sentiment/evaluation.py`（ROC、NB 对数几率关键词、错误分型、汇总表和英文图）。
 - 可从头运行的 notebook：`notebooks/04_naive_bayes.ipynb`、`notebooks/05_evaluation_error_analysis.ipynb`。
-- 自动测试：`tests/test_evaluation.py`；全仓库共 22 项测试。
+- 自动测试：`tests/test_evaluation.py`；合并后全仓库共 25 项测试。
 - 中文说明：本文件、README 更新。
 - 英文报告：`report/nb_evaluation.tex`（Method、Results、Error Analysis、Discussion 四节）。
 - 汇总结果表和图：见下方“提交到仓库的 results 文件”。
@@ -44,7 +44,7 @@ python -m nbconvert --to notebook --execute notebooks/05_evaluation_error_analys
   --output 05_evaluation_error_analysis.ipynb --output-dir notebooks
 ```
 
-本分支在 Python 3.12.14、`scikit-learn 1.9.1`、`pandas 2.3.3` 下完成 22 项测试，两个 notebook 所有代码单元格执行成功。若本机 pytest 临时目录受沙箱限制，可加 `--basetemp=/tmp/stat8017-pytest-base`。
+合并后在 Python 3.11.9、`scikit-learn 1.9.1`、`pandas 2.3.3` 下完成 25 项测试，两个 notebook 所有代码单元格执行成功。若本机 pytest 临时目录受沙箱限制，可加 `--basetemp=/tmp/stat8017-pytest-base`。
 
 ## 参数与选择规则
 
@@ -52,18 +52,18 @@ python -m nbconvert --to notebook --execute notebooks/05_evaluation_error_analys
 - 共享特征为成员 3 锁定的 unigram TF-IDF：`sublinear_tf=True`、`smooth_idf=True`、L2 归一化、不删停用词。
 - NB 网格 `alpha=[0.1, 0.5, 1.0, 2.0]`；五折分层交叉验证，每折重新拟合完整 TF-IDF + NB pipeline，以平均正类 F1 选参。
 - 训练折结果：`alpha=0.5` 的平均 F1 为 0.8052，选为最终值。与成员 3 的 `alpha=1` 探针结果 0.7962 一致。
-- Linear SVM 当前使用共享默认 `C=1`。**成员 4 的最终选择若不同，必须改参数重跑，不能用测试集选 C。**
+- Linear SVM 使用成员 4 在训练折内选定的 `C=0.1`；统一评估默认值已经同步，不能用测试集选 C。
 - 测试集只在所有参数锁定后使用一次；没有在测试集上做特征、参数或阈值选择。
 
-## 最终结果（C=1 版本）
+## 最终结果（锁定 C=0.1）
 
 | 模型 | Accuracy | Precision | Recall | F1 | ROC-AUC |
 |---|---:|---:|---:|---:|---:|
 | Dummy (majority) | 0.500 | 0.500 | 1.000 | 0.667 | 0.500 |
 | Multinomial NB (alpha=0.5) | 0.750 | 0.766 | 0.720 | 0.742 | 0.837 |
-| Linear SVM (C=1) | 0.755 | 0.793 | 0.690 | 0.738 | 0.842 |
+| Linear SVM (C=0.1) | 0.740 | 0.779 | 0.670 | 0.720 | 0.806 |
 
-NB 的 F1 略高，SVM 的 accuracy、precision 和 ROC-AUC 略高；差距很小，不作显著性结论。混淆矩阵计数：NB 为 TN=78、FP=22、FN=28、TP=72；SVM 为 TN=82、FP=18、FN=31、TP=69。
+NB 的 Accuracy、Recall、F1 和 ROC-AUC 高于锁定参数的 SVM，SVM 的 Precision 更高；不作显著性结论。混淆矩阵计数：NB 为 TN=78、FP=22、FN=28、TP=72；SVM 为 TN=81、FP=19、FN=33、TP=67。
 
 错误分析为描述性启发式，不代表因果：NB 50 个错误中 22 个 FP、28 个 FN、2 个高置信度错误；16 个为短评论，10 个带否定词，2 个带转折词。完整明细和评论原文只保留在本地 `data/processed/`，不提交到 GitHub。
 
@@ -91,5 +91,5 @@ results/figures/final_error_categories.png
 
 - 英文报告用 `\input{nb_evaluation}` 引入四节内容；`nb_evaluation.tex` 引用的 `pedregosa2011scikit`、`manning2008ir` 和 `rajagopal-restaurant-reviews` 已存在于成员 2/3 的 bib 文件，无需新增重复条目。
 - 主报告按需挑选图和表：建议保留 `tab:final-comparison`、`fig:final-roc`、`tab:error-summary`，其余作为补充。
-- 若成员 4 改动 SVM `C`，请让成员 5 先重跑评估，再统一替换报告数字；不要手工编辑 CSV 或 LaTeX。
+- SVM `C=0.1` 已由成员 4 锁定并用于统一评估；后续若正式改动参数，必须重跑完整评估，不要手工编辑 CSV 或 LaTeX。
 - 不要把 `data/processed/`、`models/`、`results/` 的其他生成文件强制加入 Git。

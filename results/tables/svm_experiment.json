@@ -1,0 +1,41 @@
+{
+  "random_state": 8017,
+  "cv_folds": 5,
+  "cv_splitter": "StratifiedKFold(shuffle=True, random_state=8017)",
+  "selection_metric": "positive-class F1",
+  "svm_c_grid": [
+    0.1,
+    1.0,
+    10.0
+  ],
+  "selected_c": 0.1,
+  "selected_cv_f1": 0.8059709477361103,
+  "ngram_range": [
+    1,
+    1
+  ],
+  "train_rows": 796,
+  "test_rows": 200,
+  "test_set_used_only_after_c_locked": true,
+  "test_metrics": {
+    "accuracy": 0.74,
+    "precision": 0.7790697674418605,
+    "recall": 0.67,
+    "f1": 0.7204301075268817,
+    "roc_auc": 0.8061
+  },
+  "elapsed_seconds": 2.7107068330515176,
+  "input_sha256": {
+    "train.csv": "cb874f345b78bd41ed234354aafd84583fac5d96e39c0d2515e5b3adf2514e6c",
+    "test.csv": "0e2af7309739fed02bd18dfb7e9a7f0edbc81f6e0e538efeeaf1093992b924cf",
+    "split_manifest.csv": "78cfba981e05f17b9ac7504353acb404aceee0b3218301026fb9a681ef38cf2a"
+  },
+  "versions": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  }
+}

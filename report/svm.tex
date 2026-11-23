@@ -1,0 +1,26 @@
+\subsection{Linear Support Vector Machine}
+\label{sec:linear-svm}
+
+The principal classifier was a linear support vector machine (SVM), which is well suited to high-dimensional sparse text representations. A linear decision function $f(\mathbf{x})=\mathbf{w}^{\top}\mathbf{x}+b$ was estimated by minimizing regularized hinge loss; the sign of $f(\mathbf{x})$ determined the predicted sentiment. The regularization parameter $C$ controls the trade-off between a wider margin and penalties for training errors: smaller values impose stronger regularization, whereas larger values fit the training observations more aggressively \citep{cortes1995support}. We used scikit-learn's \texttt{LinearSVC} implementation \citep{pedregosa2011scikit}.
+
+All SVM experiments used the fixed 796-review training partition and the unigram TF--IDF representation selected in the preceding feature experiment. To prevent information leakage, the vectorizer was fitted again inside every validation fold as part of a single pipeline. We compared $C\in\{0.1,1,10\}$ using five-fold stratified cross-validation with shuffled folds and random seed 8017. The selection criterion was mean positive-class F1; accuracy, precision, recall, and ROC--AUC were retained as secondary diagnostics. The held-out 200-review test partition was not inspected during this selection.
+
+\begin{table}[t]
+\centering
+\caption{Training-only five-fold cross-validation for Linear SVM. Values are fold means; the selected setting is bold.}
+\label{tab:svm-cv}
+\small
+\begin{tabular}{rrrrrr}
+\toprule
+$C$ & Accuracy & Precision & Recall & F1 & ROC--AUC \\
+\midrule
+\textbf{0.1} & \textbf{0.8104} & \textbf{0.8224} & 0.7922 & \textbf{0.8060} & 0.8850 \\
+1.0 & 0.8015 & 0.8054 & 0.7996 & 0.8016 & \textbf{0.8953} \\
+10.0 & 0.8015 & 0.8051 & \textbf{0.8021} & 0.8022 & 0.8915 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The mean F1 values were close, but $C=0.1$ achieved the highest validation F1 (0.8060) and accuracy (0.8104), so it was locked before test evaluation. After refitting the complete pipeline on all training reviews, the model obtained test accuracy 0.7400, precision 0.7791, recall 0.6700, F1 0.7204, and ROC--AUC 0.8061. The precision--recall imbalance indicates that the locked classifier was relatively conservative in assigning positive sentiment. These test results should be reported alongside the Naive Bayes and majority baselines in the unified evaluation section rather than interpreted as an isolated model comparison.
+
+The fitted linear coefficients also provide a direct interpretation of influential features. The strongest negative weights included \textit{not}, \textit{wasn't}, \textit{bad}, \textit{terrible}, and \textit{worst}; the strongest positive weights included \textit{great}, \textit{good}, \textit{delicious}, \textit{fantastic}, and \textit{amazing}. These coefficients describe associations in this corpus rather than causal effects, and isolated tokens can be misleading when sentiment depends on composition or context.

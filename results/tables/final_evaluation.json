@@ -11,8 +11,8 @@
   "nb_alpha_selected_by_training_f1": 0.5,
   "nb_alpha_used_in_final_fit": 0.5,
   "nb_alpha_overridden": false,
-  "svm_c_used_in_final_fit": 1.0,
-  "svm_c_source": "shared default C=1.0; regenerate with --svm-c if Member 4 selects another value",
+  "svm_c_used_in_final_fit": 0.1,
+  "svm_c_source": "Member 4 training-fold tuning selected C=0.1",
   "train_rows": 796,
   "test_rows": 200,
   "best_final_model_by_f1": "nb",
@@ -24,12 +24,12 @@
     "split_manifest.csv": "78cfba981e05f17b9ac7504353acb404aceee0b3218301026fb9a681ef38cf2a"
   },
   "versions": {
-    "python": "3.12.14",
-    "numpy": "2.5.5",
-    "pandas": "2.3.3",
-    "scipy": "1.18.1",
-    "scikit_learn": "1.9.1",
-    "joblib": "1.6.0"
+    "python": "3.11.7",
+    "numpy": "1.26.4",
+    "pandas": "2.1.4",
+    "scipy": "1.11.4",
+    "scikit_learn": "1.2.2",
+    "joblib": "1.2.0"
   },
   "committed_outputs": [
     "results/tables/final_nb_cv.csv",

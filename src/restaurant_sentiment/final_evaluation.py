@@ -100,7 +100,7 @@ def evaluate_once(models: dict, test: pd.DataFrame):
 
 def run_final_evaluation(
     output_root: str | Path = PROJECT_ROOT,
-    svm_c: float = 1.0,
+    svm_c: float = 0.1,
     nb_alpha: float | None = None,
     cv_folds: int = 5,
 ) -> dict:
@@ -190,7 +190,7 @@ def run_final_evaluation(
         "nb_alpha_used_in_final_fit": final_alpha,
         "nb_alpha_overridden": nb_alpha is not None,
         "svm_c_used_in_final_fit": svm_c,
-        "svm_c_source": "shared default C=1.0; regenerate with --svm-c if Member 4 selects another value",
+        "svm_c_source": "Member 4 training-fold tuning selected C=0.1",
         "train_rows": len(train),
         "test_rows": len(test),
         "best_final_model_by_f1": best_name,
@@ -239,7 +239,7 @@ def run_final_evaluation(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-root", type=Path, default=PROJECT_ROOT)
-    parser.add_argument("--svm-c", type=float, default=1.0, help="Locked Linear SVM C value.")
+    parser.add_argument("--svm-c", type=float, default=0.1, help="Locked Linear SVM C value.")
     parser.add_argument("--nb-alpha", type=float, default=None, help="Override the NB alpha selected on training folds.")
     parser.add_argument("--cv-folds", type=int, default=5)
     args = parser.parse_args()
