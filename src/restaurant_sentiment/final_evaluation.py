@@ -190,7 +190,10 @@ def run_final_evaluation(
         "nb_alpha_used_in_final_fit": final_alpha,
         "nb_alpha_overridden": nb_alpha is not None,
         "svm_c_used_in_final_fit": svm_c,
-        "svm_c_source": "Member 4 training-fold tuning selected C=0.1",
+        "svm_c_source": (
+            f"Locked value supplied to unified evaluation; Member 4 selected C={svm_c:g} "
+            "using training-fold cross-validation"
+        ),
         "train_rows": len(train),
         "test_rows": len(test),
         "best_final_model_by_f1": best_name,

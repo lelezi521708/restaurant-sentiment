@@ -122,6 +122,7 @@ def test_final_evaluation_is_reproducible_and_review_text_stays_local(fixed_data
     assert metadata["test_rows"] == 8
     assert metadata["nb_alpha_selected_by_training_f1"] in nb_parameter_grid()["classifier__alpha"]
     assert metadata["svm_c_used_in_final_fit"] == 0.1
+    assert "C=0.1" in metadata["svm_c_source"]
 
     tables = root / "results" / "tables"
     comparison = pd.read_csv(tables / "final_model_comparison.csv")

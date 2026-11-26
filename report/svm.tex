@@ -10,6 +10,7 @@ All SVM experiments used the fixed 796-review training partition and the unigram
 \caption{Training-only five-fold cross-validation for Linear SVM. Values are fold means; the selected setting is bold.}
 \label{tab:svm-cv}
 \small
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{rrrrrr}
 \toprule
 $C$ & Accuracy & Precision & Recall & F1 & ROC--AUC \\
@@ -19,6 +20,7 @@ $C$ & Accuracy & Precision & Recall & F1 & ROC--AUC \\
 10.0 & 0.8015 & 0.8051 & \textbf{0.8021} & 0.8022 & 0.8915 \\
 \bottomrule
 \end{tabular}
+}
 \end{table}
 
 The mean F1 values were close, but $C=0.1$ achieved the highest validation F1 (0.8060) and accuracy (0.8104), so it was locked before test evaluation. After refitting the complete pipeline on all training reviews, the model obtained test accuracy 0.7400, precision 0.7791, recall 0.6700, F1 0.7204, and ROC--AUC 0.8061. The precision--recall imbalance indicates that the locked classifier was relatively conservative in assigning positive sentiment. These test results should be reported alongside the Naive Bayes and majority baselines in the unified evaluation section rather than interpreted as an isolated model comparison.

@@ -1,0 +1,61 @@
+{
+  "verified_at_utc": "2026-11-26T19:26:17.245602+00:00",
+  "reviewed_source_commit": "540cfea83532cbc728b91c418ba2f2625bfcec96",
+  "dataset": {
+    "path": "data/raw/Restaurant_Reviews.tsv",
+    "sha256": "2b432f36bc7c7ed77312187a9afd6531dfa3d16be48b9738131dd5141195b469",
+    "input_rows": 1000,
+    "retained_rows": 996,
+    "train_rows": 796,
+    "test_rows": 200
+  },
+  "feature_selection": {
+    "selected_variant": "unigram",
+    "test_metrics_computed": false
+  },
+  "svm": {
+    "selected_c": 0.1,
+    "selected_cv_f1": 0.8059709477361103
+  },
+  "naive_bayes": {
+    "selected_alpha": 0.5
+  },
+  "final_test_metrics": [
+    {
+      "model": "dummy",
+      "accuracy": 0.5,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "roc_auc": 0.5
+    },
+    {
+      "model": "nb",
+      "accuracy": 0.75,
+      "precision": 0.7659574468085106,
+      "recall": 0.72,
+      "f1": 0.7422680412371134,
+      "roc_auc": 0.8369
+    },
+    {
+      "model": "svm",
+      "accuracy": 0.74,
+      "precision": 0.7790697674418605,
+      "recall": 0.67,
+      "f1": 0.7204301075268817,
+      "roc_auc": 0.8061
+    }
+  ],
+  "tests": {
+    "returncode": 0,
+    "summary": "26 passed in 6.39s"
+  },
+  "versions": {
+    "python": "3.11.18",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  }
+}
