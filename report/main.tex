@@ -1,0 +1,105 @@
+\documentclass{article}
+
+\usepackage[accepted]{icml2026}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+
+\icmltitlerunning{Reproducible Restaurant Review Sentiment Classification}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{Reproducible Restaurant Review Sentiment Classification with
+TF--IDF, Naive Bayes, and Linear SVM}
+
+% Replace the member labels with the five names and student IDs before submission.
+\begin{icmlauthorlist}
+\icmlauthor{Member 1}{hku}
+\icmlauthor{Member 2}{hku}
+\icmlauthor{Member 3}{hku}
+\icmlauthor{Member 4}{hku}
+\icmlauthor{Member 5}{hku}
+\end{icmlauthorlist}
+
+\icmlaffiliation{hku}{STAT8017 Data Mining Techniques, The University of Hong Kong}
+\icmlcorrespondingauthor{Member 1}{replace-with-group-email@example.com}
+
+\vskip 0.3in
+]
+
+\printAffiliationsAndNotice{}
+
+\begin{abstract}
+We study binary sentiment classification for a fixed public snapshot of 1,000
+restaurant-review snippets. After removing four same-label duplicate rows, we
+create one stratified 796/200 training/test split and compare word-unigram and
+unigram--bigram TF--IDF representations without fitting vocabulary or inverse
+document frequencies on validation or test text. Training-fold validation
+selects word unigrams, Linear SVM with $C=0.1$, and Multinomial Naive Bayes with
+$\alpha=0.5$. On the held-out test partition, Naive Bayes obtains F1 0.742 and
+ROC--AUC 0.837, while Linear SVM obtains F1 0.720 and ROC--AUC 0.806. We report
+data quality checks, model interpretation, and descriptive error categories,
+and provide a fully reproducible code and notebook workflow.
+\end{abstract}
+
+\section{Introduction}
+
+Short restaurant reviews express sentiment through sparse lexical cues,
+negation, and context. This project asks whether a linear support vector
+machine or Multinomial Naive Bayes is more effective for a small labelled text
+dataset, whether adjacent bigrams improve over word unigrams, and which error
+patterns remain after model selection. We use TF--IDF because it provides a
+transparent sparse representation that is compatible with both classifiers.
+
+Our experimental design separates representation selection and hyperparameter
+tuning from final evaluation. Every cross-validation fold refits the complete
+TF--IDF and classifier pipeline, while the fixed test partition is excluded
+from feature and parameter selection. The repository records data hashes,
+random seeds, dependency versions, aggregate predictions, and an independent
+Member 1 reproduction manifest so that every reported number can be traced to
+code.
+
+\input{data_eda}
+\input{text_features}
+
+\section{Methods and Experimental Setup}
+\label{sec:methods}
+
+All experiments use the same word-unigram TF--IDF settings selected in
+Section~\ref{sec:text-features}. Hyperparameters are selected by mean
+positive-class F1 under five-fold stratified cross-validation with shuffling
+and random seed 8017. Accuracy, precision, recall, F1, and ROC--AUC are retained
+for diagnosis. The majority-class classifier is included as a minimum
+baseline.
+
+\input{svm}
+\input{nb_evaluation}
+
+\section{Conclusion}
+
+The experiment provides a reproducible comparison on this fixed small corpus.
+Word bigrams increased dimensionality without improving the prespecified SVM
+validation F1, so word unigrams were retained. Multinomial Naive Bayes achieved
+the strongest held-out F1 and ROC--AUC, while the Linear SVM achieved higher
+precision. The numerical gaps are modest and the test set contains only 200
+reviews, so the result should be treated as evidence for this dataset rather
+than a general ranking of the algorithms. Better contraction handling,
+manually validated error labels, and a larger independently collected test set
+would strengthen future work.
+
+\section*{Impact Statement}
+
+Sentiment classifiers can support aggregate service-quality analysis, but
+their errors may misrepresent individual customers, dialects, sarcasm, or
+mixed opinions. This study uses a small public educational dataset and does
+not identify reviewers or restaurants. Predictions should not be used for
+automated punitive decisions. We therefore report error patterns and model
+limitations, keep raw text out of the repository, and frame feature weights as
+correlations rather than causal explanations.
+
+\bibliography{references}
+\bibliographystyle{icml2026}
+
+\end{document}
