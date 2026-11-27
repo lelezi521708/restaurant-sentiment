@@ -1,12 +1,5 @@
 # Restaurant Review Sentiment Classification
 
-STAT8017 Data Mining Techniques group project
-
-> English documentation appears first. The complete Chinese version follows.
-> 英文说明在前，完整中文说明在后。
-
-## English
-
 ### Project overview
 
 This project builds a reproducible binary sentiment classifier for short
@@ -214,16 +207,7 @@ restaurant-sentiment/
 └── report/                        # integrated English ICML LaTeX report
 ```
 
-### Optional prediction demo
-
-An interactive website is not required. The model comparison, ROC, confusion
-matrices, and error plots already provide the academic visual evidence. For a
-live presentation, one notebook cell predicting a user-entered review is
-sufficient and should be described as a demo, not additional test evidence.
-
 ---
-
-## 中文
 
 ### 项目简介
 
@@ -368,24 +352,3 @@ python -m ipykernel install --user \
 - 测试集不参与 n-gram、SVM `C` 或 NB `alpha` 的选择；
 - 指标由代码生成，并记录哈希和依赖版本；
 - 不上传完整评论、拟合模型、密钥或个人路径。
-
-### 英文报告
-
-统一 ICML 格式入口为 `report/main.tex`，仓库包含 ICML 2026 样式和统一参考文献。
-提交前必须把 5 个成员和邮箱占位符替换为真实姓名、学号及联系方式。
-
-```bash
-cd report
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-pdflatex main.tex
-```
-
-最终必须检查正文是否符合课程规定的 8 页限制。
-
-### 是否需要输入评论的演示界面
-
-课程统计分析部分不要求网页。当前模型对比、ROC、混淆矩阵和错误分析图已经构成完整
-可视化证据。如需现场展示，在 Notebook 最后增加一个单条评论预测单元格即可；该功能
-属于演示，不能当作额外测试结果。
