@@ -115,11 +115,27 @@ python -m pytest -q
 ```
 
 Expected checks: 796 training rows, 200 test rows, unigram TF-IDF, SVM
-`C=0.1`, NB `alpha=0.5`, and 26 passing tests.
+`C=0.1`, NB `alpha=0.5`, and 28 passing tests.
 
 Member 1 independently repeated the full workflow. See
 [`docs/member1_reproduction.md`](docs/member1_reproduction.md) and the
-[machine-readable manifest](results/tables/member1_reproduction.json).
+[machine-readable manifest](results/tables/member1_reproduction.json). That
+manifest records the earlier 26-test run; this demo adds two CLI checks, so
+the current suite contains 28 tests.
+
+### Single-review prediction demo
+
+After the complete reproduction command creates the local final NB model, run:
+
+```bash
+python scripts/predict_review.py "The food was delicious and the staff were friendly."
+```
+
+The command prints `Predicted sentiment: Positive (1)` or
+`Predicted sentiment: Negative (0)`. It uses the saved NB pipeline under
+`models/nb/`, so the dataset download and reproduction step must come first.
+This is an illustrative prediction, not an additional test-set result.
+Fitted models and review text are not committed to Git.
 
 ### Notebooks and Jupyter kernel
 
@@ -202,7 +218,7 @@ restaurant-sentiment/
 ├── notebooks/                    # five notebooks
 ├── scripts/reproduce_project.py  # one-command independent reproduction
 ├── src/restaurant_sentiment/     # tested implementation
-├── tests/                         # 26 automated tests
+├── tests/                         # 28 automated tests
 ├── results/{figures,tables}/      # report-ready aggregate artifacts
 └── report/                        # integrated English ICML LaTeX report
 ```
@@ -309,9 +325,21 @@ python -m pytest -q
 ```
 
 预期：796 条训练、200 条测试、unigram、SVM `C=0.1`、NB `alpha=0.5`、
-26 项测试通过。成员 1 的独立复现记录见
+28 项测试通过。成员 1 的独立复现记录见
 [`docs/member1_reproduction.md`](docs/member1_reproduction.md) 和
 [`results/tables/member1_reproduction.json`](results/tables/member1_reproduction.json)。
+该记录保存的是新增示例前的 26 项测试结果；本次新增两项命令行测试，当前共 28 项。
+
+### 单句情感预测示例
+
+先下载并放好固定数据集，运行上面的完整复现命令，生成本地的 NB 模型；随后执行：
+
+```bash
+python scripts/predict_review.py "The food was delicious and the staff were friendly."
+```
+
+命令会输出 `Positive (1)` 或 `Negative (0)`。这是展示模型如何预测单条评论的
+示例，不是新的测试集实验。训练好的模型和评论原文不会上传到 Git。
 
 ### Notebook 和 Jupyter kernel
 
